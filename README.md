@@ -23,6 +23,6 @@ The game combines classic word search mechanics with a colorful flower-themed pr
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="screenshots/home.png" width="45%">
-  <img src="screenshots/game.png" width="45%">
+  <img src="screenshots/game.png" width="45%" alt="Game screen">
+  <img src="screenshots/bonus.png" width="45%" alt="Bonus level">
 </p>
