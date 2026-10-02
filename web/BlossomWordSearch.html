@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blossom Word Search</title>
+<style>
+  :root {
+    --bg-top: #ffedf2;
+    --bg-bottom: #f0e6ff;
+    --pink: #ed6b99;
+    --deep: #6b3361;
+    --leaf: #73b880;
+    --gold: #fabd40;
+    --card: rgba(255, 255, 255, 0.85);
+    --shadow: 0 6px 18px rgba(107, 51, 97, 0.08);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(var(--bg-top), var(--bg-bottom)) fixed;
+    background-color: var(--bg-top);
+    color: var(--deep);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  [hidden] { display: none !important; }
+  button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+
+  .screen {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100dvh;
+    padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 999px; background: var(--card);
+    font-weight: 700; box-shadow: var(--shadow);
+  }
+  .coin {
+    width: 20px; height: 20px; border-radius: 50%; background: var(--gold);
+    color: #fff; font-size: 12px; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .coins { font-variant-numeric: tabular-nums; }
+
+  /* Home */
+  .logo { text-align: center; margin-top: 8px; }
+  .logo h1 {
+    margin: 0; font-size: 44px; font-weight: 900; letter-spacing: -0.5px;
+    background: linear-gradient(#f28fb3, var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .logo p { margin: 2px 0 0; font-size: 20px; font-weight: 600; }
+  .bloom-card {
+    margin: auto 0; padding: 24px; border-radius: 28px; background: var(--card);
+    display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: var(--shadow);
+  }
+  .ring { position: relative; width: 170px; height: 170px; }
+  .ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 12; }
+  .ring .track { stroke: rgba(237, 107, 153, 0.15); }
+  .ring .bar { stroke: var(--pink); stroke-linecap: round; transition: stroke-dashoffset 0.6s; }
+  .ring .flower { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 70px; transition: all 0.6s; }
+  .bloom-card h3 { margin: 0; font-size: 18px; }
+  .bloom-card small { font-size: 15px; opacity: 0.7; }
+
+  .big-btn {
+    width: 100%; padding: 16px; border-radius: 22px; color: #fff; font-size: 20px; font-weight: 800;
+    background: linear-gradient(#f590b5, var(--pink)); box-shadow: 0 8px 16px rgba(237, 107, 153, 0.35);
+    transition: transform 0.15s;
+  }
+  .big-btn:active { transform: scale(0.96); }
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .tile {
+    position: relative; padding: 14px 4px; border-radius: 20px; background: var(--card);
+    display: flex; flex-direction: column; align-items: center; gap: 4px; font-weight: 700; box-shadow: var(--shadow);
+  }
+  .tile span { font-size: 26px; }
+  .tile .dot { position: absolute; top: 8px; right: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--pink); }
+
+  /* Game */
+  .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--card); font-size: 20px; font-weight: 800; box-shadow: var(--shadow); }
+  .level-name { font-weight: 700; font-size: 17px; }
+  .header { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .header h2 { margin: 0; font-size: 24px; }
+  .badge { padding: 4px 10px; border-radius: 999px; background: rgba(146, 72, 196, 0.75); color: #fff; font-size: 12px; font-weight: 700; }
+  .progress { width: 220px; max-width: 100%; height: 6px; border-radius: 3px; background: rgba(107, 51, 97, 0.12); overflow: hidden; }
+  .progress div { height: 100%; background: var(--pink); transition: width 0.3s; }
+  .hidden-word { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .hidden-word span {
+    width: 30px; height: 34px; border-radius: 8px; background: rgba(107, 51, 97, 0.15);
+    color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; transition: background 0.3s;
+  }
+  .hidden-word span.on { background: var(--leaf); }
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .chip { padding: 6px 12px; border-radius: 999px; background: var(--card); font-weight: 600; font-size: 15px; transition: background 0.25s, color 0.25s; }
+  .chip.found { color: #fff; }
+  .chip.found.strike { text-decoration: line-through; }
+
+  .board-wrap { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .board {
+    position: relative; width: 100%; aspect-ratio: 1; border-radius: 20px; background: var(--card);
+    box-shadow: var(--shadow); touch-action: none; container-type: inline-size; cursor: pointer;
+  }
+  .board svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .letters { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(var(--n), 1fr); grid-template-rows: repeat(var(--n), 1fr); pointer-events: none; }
+  .letters div { display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: calc(100cqw / var(--n) * 0.5); }
+  .hint-ring { fill: none; stroke: var(--gold); stroke-width: 0.06; animation: pulse 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pulse { 50% { transform: scale(1.15); } }
+  .shake { animation: shake 0.35s linear; }
+  @keyframes shake { 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+
+  .boosters { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .booster {
+    padding: 10px; border-radius: 16px; background: var(--card); box-shadow: var(--shadow);
+    display: flex; align-items: center; justify-content: center; gap: 8px; text-align: left;
+  }
+  .booster b { display: block; font-size: 15px; }
+  .booster small { font-size: 12px; }
+  .booster span { font-size: 22px; }
+
+  .toast {
+    position: fixed; left: 50%; top: max(70px, calc(env(safe-area-inset-top) + 60px)); transform: translateX(-50%);
+    padding: 10px 16px; border-radius: 999px; background: rgba(107, 51, 97, 0.88); color: #fff; font-weight: 700; font-size: 14px;
+    z-index: 30; white-space: nowrap;
+  }
+
+  /* Overlays */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.35); z-index: 20;
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    animation: fade 0.25s;
+  }
+  @keyframes fade { from { opacity: 0; } }
+  .dialog {
+    width: 100%; max-width: 380px; padding: 28px; border-radius: 32px; background: var(--bg-top);
+    display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+    animation: pop 0.35s cubic-bezier(.3, 1.4, .6, 1);
+  }
+  @keyframes pop { from { transform: scale(0.85); opacity: 0; } }
+  .dialog h2 { margin: 0; font-size: 26px; }
+  .dialog .emoji { font-size: 90px; line-height: 1; animation: bloom 0.7s cubic-bezier(.3, 1.6, .6, 1); }
+  @keyframes bloom { from { transform: scale(0.2) rotate(-90deg); } }
+  .link-btn { font-weight: 700; padding: 6px; }
+  .sheet {
+    width: 100%; max-width: 480px; max-height: 90dvh; overflow-y: auto; padding: 24px 20px;
+    border-radius: 28px; background: linear-gradient(var(--bg-top), var(--bg-bottom));
+    display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;
+  }
+  .sheet h2 { margin: 0; font-size: 30px; }
+  .garden { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .garden div { padding: 16px 4px; border-radius: 20px; background: var(--card); font-size: 13px; font-weight: 700; }
+  .garden span { display: block; font-size: 46px; }
+  .garden .locked span { filter: grayscale(1); opacity: 0.25; }
+  .wheel-box { position: relative; width: min(290px, 80vw); aspect-ratio: 1; }
+  .wheel-box svg { width: 100%; height: 100%; transition: transform 3.5s cubic-bezier(.15, .8, .25, 1); }
+  .pointer { position: absolute; left: 50%; top: -14px; transform: translateX(-50%); font-size: 30px; color: var(--deep); }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<section class="screen" id="home">
+  <div class="row">
+    <button class="pill" id="langBtn"></button>
+    <div class="pill"><span class="coin">$</span><span class="coins"></span></div>
+  </div>
+  <div class="logo">
+    <h1>Blossom</h1>
+    <p id="subtitle"></p>
+  </div>
+  <div class="bloom-card">
+    <div class="ring">
+      <svg viewBox="0 0 170 170"><circle class="track" cx="85" cy="85" r="74"/><circle class="bar" id="ringBar" cx="85" cy="85" r="74"/></svg>
+      <div class="flower" id="ringFlower"></div>
+    </div>
+    <h3 id="nextBloom"></h3>
+    <small id="levelsToGo"></small>
+  </div>
+  <button class="big-btn" id="playBtn"></button>
+  <div class="tiles">
+    <button class="tile" id="dailyBtn"><span>📅</span><em style="font-style:normal" id="dailyLbl"></em><i class="dot" id="dailyDot"></i></button>
+    <button class="tile" id="gardenBtn"><span>🌷</span><em style="font-style:normal" id="gardenLbl"></em></button>
+    <button class="tile" id="wheelBtn"><span>🎡</span><em style="font-style:normal" id="wheelLbl"></em><i class="dot" id="wheelDot"></i></button>
+  </div>
+</section>
+
+<!-- GAME -->
+<section class="screen" id="game" hidden>
+  <div class="row">
+    <button class="icon-btn" id="backBtn" aria-label="Back">‹</button>
+    <div class="level-name" id="levelName"></div>
+    <div class="pill"><span class="coin">$</span><span class="coins"></span></div>
+  </div>
+  <div class="header">
+    <div class="badge" id="twisterBadge" hidden></div>
+    <h2 id="levelTitle"></h2>
+    <div class="progress"><div id="progressBar"></div></div>
+  </div>
+  <div class="hidden-word" id="hiddenWord"></div>
+  <div class="chips" id="chips"></div>
+  <div class="board-wrap">
+    <div class="board" id="board">
+      <svg id="boardSvg" preserveAspectRatio="none"></svg>
+      <div class="letters" id="letters"></div>
+    </div>
+  </div>
+  <div class="boosters">
+    <button class="booster" id="hintBtn"><span>💡</span><div><b id="hintLbl"></b><small>25 coin</small></div></button>
+    <button class="booster" id="revealBtn"><span>🪄</span><div><b id="revealLbl"></b><small>75 coin</small></div></button>
+  </div>
+</section>
+
+<div class="toast" id="toast" hidden></div>
+<div class="overlay" id="overlay" hidden></div>
+
+<script>
+// ───────────────────────── Word content ─────────────────────────
+const WORDS = {
+  en: {
+    alphabet: "ABCDEFGHIJKLMNOPRSTUVWY",
+    themes: [
+      ["Flowers", "ROSE TULIP LILY DAISY ORCHID IRIS LOTUS POPPY PEONY VIOLET JASMINE LILAC DAHLIA ASTER"],
+      ["In the Garden", "SEED SOIL RAKE HOSE SHOVEL BLOOM PETAL STEM ROOT LEAF WEED MULCH POT FENCE"],
+      ["Fruits", "APPLE PEAR MANGO GRAPE LEMON PEACH PLUM CHERRY BERRY KIWI MELON FIG LIME PAPAYA"],
+      ["Animals", "TIGER HORSE RABBIT EAGLE ZEBRA PANDA MOUSE SHEEP OTTER WHALE CAMEL LION BEAR WOLF"],
+      ["Ocean", "WAVE CORAL SHELL SHARK TIDE REEF SAND CRAB PEARL SQUID KELP SALT FISH BOAT"],
+      ["Weather", "RAIN SNOW CLOUD STORM WIND SUNNY FOG HAIL FROST MIST THUNDER BREEZE"],
+      ["Kitchen", "SPOON FORK KNIFE PLATE BOWL OVEN STOVE KETTLE PAN CUP MUG TOASTER"],
+      ["Colors", "RED BLUE GREEN YELLOW PURPLE ORANGE PINK BROWN BLACK WHITE GRAY TEAL AMBER"],
+      ["Music", "PIANO GUITAR DRUM FLUTE VIOLIN HARP SONG NOTE BEAT TEMPO CHORD MELODY"],
+      ["Sports", "SOCCER TENNIS GOLF RUGBY HOCKEY BOXING SKATE SKI SWIM POLO JUDO ARCHERY"],
+      ["Space", "STAR MOON PLANET COMET ORBIT GALAXY ROCKET MARS VENUS SATURN NEBULA ASTEROID"],
+      ["Birds", "ROBIN SPARROW OWL HAWK CROW DOVE PARROT SWAN FINCH CRANE HERON PIGEON"],
+      ["Springtime", "SPRING BLOSSOM NEST SUNSHINE MEADOW BUTTERFLY BEE HONEY GRASS POLLEN DEW SPROUT"],
+      ["Trees", "OAK PINE MAPLE BIRCH WILLOW CEDAR PALM ELM ASH FIR SPRUCE BAMBOO"],
+      ["Tea Time", "TEA CAKE SCONE SUGAR MILK CREAM COOKIE BISCUIT PASTRY JAM SAUCER KETTLE"],
+      ["Good Feelings", "HAPPY CALM JOY LOVE PEACE HOPE SMILE CHEER BLISS GRACE KIND GLAD"],
+    ],
+    opposites: "HOT-COLD DAY-NIGHT UP-DOWN BIG-SMALL FAST-SLOW OPEN-CLOSED HAPPY-SAD LIGHT-DARK WET-DRY YES-NO OLD-NEW NEAR-FAR HARD-SOFT HIGH-LOW FULL-EMPTY RICH-POOR LOUD-QUIET WIN-LOSE TOP-BOTTOM LEFT-RIGHT EARLY-LATE STRONG-WEAK SWEET-SOUR LOVE-HATE PUSH-PULL TALL-SHORT THICK-THIN CLEAN-DIRTY FIRST-LAST BEGIN-END BUY-SELL GIVE-TAKE ASK-ANSWER SUMMER-WINTER NORTH-SOUTH EAST-WEST ENTER-EXIT LAUGH-CRY FRONT-BACK INSIDE-OUTSIDE",
+    hidden: "BLOOM PETAL GARDEN SPRING NECTAR POLLEN FLORA SUNNY BREEZE MEADOW",
+  },
+  tr: {
+    alphabet: "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ",
+    themes: [
+      ["Çiçekler", "GÜL LALE ZAMBAK PAPATYA ORKİDE SÜSEN NERGİS MENEKŞE YASEMİN LEYLAK KARANFİL SÜMBÜL GELİNCİK MANOLYA"],
+      ["Bahçede", "TOHUM TOPRAK TIRMIK HORTUM KÜREK ÇİÇEK YAPRAK SAP KÖK SAKSI ÇİT FİDAN TOMURCUK SULAMA"],
+      ["Meyveler", "ELMA ARMUT MANGO ÜZÜM LİMON ŞEFTALİ ERİK KİRAZ KAYISI KİVİ KAVUN İNCİR KARPUZ MUZ"],
+      ["Hayvanlar", "KAPLAN TAVŞAN KARTAL ZEBRA PANDA FARE KOYUN BALİNA DEVE ASLAN AYI KURT TİLKİ SİNCAP"],
+      ["Deniz", "DALGA MERCAN KABUK RESİF KUM YENGEÇ İNCİ AHTAPOT YOSUN TUZ BALIK TEKNE MARTI LİMAN"],
+      ["Hava Durumu", "YAĞMUR KAR BULUT FIRTINA RÜZGAR GÜNEŞ SİS DOLU AYAZ ŞİMŞEK GÖKKUŞAĞI ESİNTİ"],
+      ["Mutfak", "KAŞIK ÇATAL BIÇAK TABAK KASE FIRIN OCAK ÇAYDANLIK TAVA FİNCAN KUPA TENCERE"],
+      ["Renkler", "KIRMIZI MAVİ YEŞİL SARI MOR TURUNCU PEMBE KAHVE SİYAH BEYAZ GRİ LACİVERT BORDO"],
+      ["Müzik", "PİYANO GİTAR DAVUL FLÜT KEMAN ARP ŞARKI NOTA RİTİM BAĞLAMA AKOR MELODİ"],
+      ["Spor", "FUTBOL TENİS GOLF RAGBİ HOKEY BOKS KAYAK YÜZME JUDO OKÇULUK VOLEYBOL GÜREŞ"],
+      ["Uzay", "YILDIZ GEZEGEN YÖRÜNGE GALAKSİ ROKET MARS VENÜS SATÜRN NEBULA ASTEROİT UYDU METEOR"],
+      ["Kuşlar", "KUMRU SERÇE BAYKUŞ ŞAHİN KARGA GÜVERCİN PAPAĞAN KUĞU İSPİNOZ TURNA BALIKÇIL LEYLEK"],
+      ["Bahar", "BAHAR TOMURCUK YUVA GÜNEŞ ÇAYIR KELEBEK ARI BAL ÇİMEN POLEN ÇİY FİLİZ"],
+      ["Ağaçlar", "MEŞE ÇAM AKÇAAĞAÇ HUŞ SÖĞÜT SEDİR PALMİYE KARAAĞAÇ DİŞBUDAK KAVAK ÇINAR BAMBU"],
+      ["Çay Saati", "ÇAY PASTA KURABİYE ŞEKER SÜT KREMA BİSKÜVİ POĞAÇA REÇEL SİMİT BARDAK TABAK"],
+      ["Güzel Duygular", "MUTLU HUZUR NEŞE SEVGİ BARIŞ UMUT GÜLÜMSE SEVİNÇ ŞÜKÜR ZARAFET NAZİK KEYİF"],
+    ],
+    opposites: "SICAK-SOĞUK GECE-GÜNDÜZ YUKARI-AŞAĞI BÜYÜK-KÜÇÜK HIZLI-YAVAŞ AÇIK-KAPALI MUTLU-ÜZGÜN AYDINLIK-KARANLIK ISLAK-KURU EVET-HAYIR ESKİ-YENİ YAKIN-UZAK SERT-YUMUŞAK YÜKSEK-ALÇAK DOLU-BOŞ ZENGİN-FAKİR SESLİ-SESSİZ KAZAN-KAYBET ÜST-ALT SAĞ-SOL ERKEN-GEÇ GÜÇLÜ-ZAYIF TATLI-EKŞİ İT-ÇEK UZUN-KISA KALIN-İNCE TEMİZ-KİRLİ İLK-SON BAŞLA-BİTİR AL-SAT SORU-CEVAP YAZ-KIŞ KUZEY-GÜNEY DOĞU-BATI GİRİŞ-ÇIKIŞ GÜL-AĞLA ÖN-ARKA İÇ-DIŞ AĞIR-HAFİF ZOR-KOLAY DOĞRU-YANLIŞ",
+    hidden: "ÇİÇEK BAHAR BAHÇE NEKTAR POLEN LALE GÜNEŞ ESİNTİ ÇAYIR FİLİZ",
+  },
+};
+for (const lg in WORDS) {
+  const w = WORDS[lg];
+  w.themes = w.themes.map(([title, words]) => ({ title, words: words.split(" ") }));
+  w.opposites = w.opposites.split(" ").map(p => p.split("-"));
+  w.hidden = w.hidden.split(" ");
+  w.alphabet = [...w.alphabet];
+}
+
+const FLOWERS = [
+  ["🌸", "Cherry Blossom", "Kiraz Çiçeği"], ["🌷", "Tulip", "Lale"], ["🌼", "Daisy", "Papatya"],
+  ["🌹", "Rose", "Gül"], ["🌻", "Sunflower", "Ayçiçeği"], ["🌺", "Hibiscus", "Ebegümeci"],
+  ["🪷", "Lotus", "Nilüfer"], ["🪻", "Hyacinth", "Sümbül"], ["🏵️", "Rosette", "Rozet Çiçeği"],
+  ["💮", "White Blossom", "Beyaz Çiçek"], ["🥀", "Wilted Rose", "Solgun Gül"], ["💐", "Bouquet", "Buket"],
+].map(([emoji, en, tr], id) => ({ id, emoji, en, tr }));
+const LEVELS_PER_BLOOM = 3;
+const WORD_COLORS = ["#fa99b8", "#b39ef2", "#8cd19e", "#fcc273", "#85c7f2", "#f28c80", "#cca6d9", "#99d9cc"];
+const HINT_COST = 25, REVEAL_COST = 75;
+const REWARD = { normal: 10, twister: 20, bonus: 40, daily: 100 };
+
+// ───────────────────────── Player data ─────────────────────────
+const store = (() => {
+  const def = { level: 1, coins: 200, flowers: [], bloom: 0, wordsFound: 0, lastDaily: null, lastSpin: null, lang: null };
+  try { const raw = localStorage.getItem("blossom"); if (raw) return Object.assign(def, JSON.parse(raw)); } catch (e) {}
+  return def;
+})();
+function save() { try { localStorage.setItem("blossom", JSON.stringify(store)); } catch (e) {} }
+const systemLang = () => ((navigator.language || "").toLowerCase().startsWith("tr") ? "tr" : "en");
+const lang = () => store.lang || systemLang();
+const t = (en, tr) => (lang() === "tr" ? tr : en);
+const dayKey = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+const nextFlower = () => FLOWERS[store.flowers.length % FLOWERS.length];
+const vibrate = p => { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} };
+
+// ───────────────────────── Level generation ─────────────────────────
+function seeded(seed) { // mulberry32 — same level number always gives the same puzzle
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let x = Math.imul(a ^ (a >>> 15), 1 | a);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const pick = (arr, rnd) => arr[Math.floor(rnd() * arr.length)];
+const shuffle = (arr, rnd) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const len = s => [...s].length;
+
+const DIRS = { right: [0, 1], down: [1, 0], downRight: [1, 1], upRight: [-1, 1], left: [0, -1], up: [-1, 0], upLeft: [-1, -1], downLeft: [1, -1] };
+
+function levelKind(n) {
+  if (n >= 5 && n % 5 === 0) return "twister";
+  if (n >= 7 && n % 7 === 0) return "bonus";
+  return "normal";
+}
+
+// Size: 6×6 → +1 every 5 levels → 12×12. Words: 4 → +1 every 3 levels → 12.
+function difficulty(n) {
+  n = Math.max(1, n);
+  const size = Math.min(6 + Math.floor((n - 1) / 5), 12);
+  const count = Math.min(4 + Math.floor((n - 1) / 3), 12);
+  const forward = ["right", "down", "downRight", "upRight"];
+  const dirs = n < 11 ? forward : n < 21 ? forward.concat(["left", "up"]) : Object.keys(DIRS);
+  return { size, count, dirs };
+}
+
+function makeLevel(n, lg) {
+  const { size, count, dirs } = difficulty(n);
+  return build(n, levelKind(n), lg, size, count, dirs, seeded(n * 7919));
+}
+
+function makeDaily(lg) {
+  const d = new Date();
+  return build(0, "daily", lg, 10, 10, Object.keys(DIRS), seeded(d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate()));
+}
+
+function build(number, kind, lg, size, count, dirs, rnd) {
+  let want = count;
+  for (;;) {
+    const { title, targets, hidden } = pickTargets(kind, lg, size, want, rnd);
+    const res = generate(targets.map(x => x.answer), size, dirs, WORDS[lg].alphabet, rnd);
+    if (res) return { number, kind, lang: lg, title, size, grid: res.grid, targets, placements: res.placements, hidden };
+    want = Math.max(2, want - 1);
+  }
+}
+
+// Avoid words that contain each other (e.g. SUN / SUNNY) — one find would be ambiguous.
+const compatible = (w, others) => !others.some(o => o.includes(w) || w.includes(o));
+
+function pickTargets(kind, lg, size, count, rnd) {
+  const W = WORDS[lg];
+  const tl = (en, tr) => (lg === "tr" ? tr : en);
+  if (kind === "twister") {
+    const pairs = shuffle(W.opposites.filter(([a, b]) => len(a) <= size && len(b) <= size), rnd);
+    const targets = [];
+    for (const [a, b] of pairs) {
+      if (targets.length >= count) break;
+      const [clue, answer] = rnd() < 0.5 ? [a, b] : [b, a];
+      if (len(answer) < 2 || !compatible(answer, targets.map(x => x.answer))) continue;
+      targets.push({ clue, answer });
+    }
+    return { title: tl("Twister: Opposites", "Twister: Zıt Anlamlar"), targets, hidden: null };
+  }
+  const theme = pick(W.themes, rnd);
+  const targets = [];
+  for (const word of shuffle(theme.words.filter(w => len(w) <= size && len(w) >= 3), rnd)) {
+    if (targets.length >= count) break;
+    if (!compatible(word, targets.map(x => x.answer))) continue;
+    targets.push({ clue: null, answer: word });
+  }
+  if (kind === "bonus") return { title: tl("Bonus", "Bonus") + " · " + theme.title, targets, hidden: pick(W.hidden, rnd) };
+  if (kind === "daily") return { title: tl("Daily", "Günlük") + " · " + theme.title, targets, hidden: null };
+  return { title: theme.title, targets, hidden: null };
+}
+
+function generate(words, size, dirs, alphabet, rnd) {
+  const sorted = [...words].sort((a, b) => len(b) - len(a));
+  for (let attempt = 0; attempt < 60; attempt++) {
+    const grid = Array.from({ length: size }, () => Array(size).fill(null));
+    const placements = {};
+    let ok = true;
+    for (const w of sorted) {
+      const cells = place(w, grid, dirs, rnd);
+      if (!cells) { ok = false; break; }
+      placements[w] = cells;
+    }
+    if (!ok) continue;
+    // Mixing in letters from the hidden words makes decoys more convincing.
+    const pool = [...words.join("")];
+    for (const row of grid) for (let c = 0; c < size; c++) if (row[c] === null) row[c] = pick(rnd() < 0.5 ? pool : alphabet, rnd);
+    return { grid, placements };
+  }
+  return null;
+}
+
+function place(word, grid, dirs, rnd) {
+  const letters = [...word], n = grid.length, byDir = {};
+  for (const d of dirs) {
+    const [dr, dc] = DIRS[d];
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+      const er = r + dr * (letters.length - 1), ec = c + dc * (letters.length - 1);
+      if (er < 0 || er >= n || ec < 0 || ec >= n) continue;
+      let fits = true, overlap = 0;
+      for (let i = 0; i < letters.length; i++) {
+        const ch = grid[r + dr * i][c + dc * i];
+        if (ch === null) continue;
+        if (ch === letters[i]) overlap++; else { fits = false; break; }
+      }
+      // Never let a word sit entirely on top of another one.
+      if (fits && overlap < letters.length) (byDir[d] ||= []).push([r, c]);
+    }
+  }
+  // Pick the direction first so diagonals (which fit in fewer spots) are as likely as straight lines.
+  const available = dirs.filter(d => byDir[d]);
+  if (!available.length) return null;
+  const d = pick(available, rnd), [r0, c0] = pick(byDir[d], rnd), [dr, dc] = DIRS[d];
+  return letters.map((ch, i) => { const r = r0 + dr * i, c = c0 + dc * i; grid[r][c] = ch; return { r, c }; });
+}
+
+// ───────────────────────── Screens ─────────────────────────
+const $ = id => document.getElementById(id);
+function showScreen(name) {
+  $("home").hidden = name !== "home";
+  $("game").hidden = name !== "game";
+  if (name === "home") renderHome();
+  window.scrollTo(0, 0);
+}
+function renderCoins() { document.querySelectorAll(".coins").forEach(el => (el.textContent = store.coins)); }
+
+function renderHome() {
+  document.documentElement.lang = lang();
+  $("langBtn").textContent = lang() === "tr" ? "🇹🇷 TR" : "🇬🇧 EN";
+  renderCoins();
+  $("subtitle").textContent = t("Word Search", "Kelime Avı");
+  const progress = store.bloom / LEVELS_PER_BLOOM, circ = 2 * Math.PI * 74, f = nextFlower();
+  $("ringBar").style.strokeDasharray = circ;
+  $("ringBar").style.strokeDashoffset = circ * (1 - progress);
+  $("ringFlower").textContent = f.emoji;
+  $("ringFlower").style.opacity = 0.35 + 0.65 * progress;
+  $("ringFlower").style.transform = `scale(${0.6 + 0.4 * progress})`;
+  $("nextBloom").textContent = t("Next bloom", "Sıradaki çiçek") + ": " + f[lang()];
+  const left = LEVELS_PER_BLOOM - store.bloom;
+  $("levelsToGo").textContent = t(`${left} level(s) to go`, `${left} bölüm kaldı`);
+  $("playBtn").textContent = "▶  " + t("Level", "Bölüm") + " " + store.level;
+  $("dailyLbl").textContent = t("Daily", "Günlük");
+  $("gardenLbl").textContent = t("Garden", "Bahçe");
+  $("wheelLbl").textContent = t("Wheel", "Çark");
+  $("dailyDot").hidden = store.lastDaily === dayKey();
+  $("wheelDot").hidden = store.lastSpin === dayKey();
+}
+
+$("langBtn").onclick = () => { store.lang = lang() === "tr" ? "en" : "tr"; save(); renderHome(); };
+$("playBtn").onclick = () => startGame(makeLevel(store.level, lang()));
+$("dailyBtn").onclick = () => startGame(makeDaily(lang()));
+$("gardenBtn").onclick = openGarden;
+$("wheelBtn").onclick = openWheel;
+$("backBtn").onclick = () => showScreen("home");
+
+// ───────────────────────── Game ─────────────────────────
+let G = null;
+const key = p => p.r + "," + p.c;
+
+function startGame(level) {
+  G = { level, found: new Map(), hinted: new Set(), sel: [], complete: false, dragStart: null };
+  const n = level.size;
+  $("board").style.setProperty("--n", n);
+  $("boardSvg").setAttribute("viewBox", `0 0 ${n} ${n}`);
+  $("letters").innerHTML = level.grid.flat().map(ch => `<div>${ch}</div>`).join("");
+  $("overlay").hidden = true;
+  showScreen("game");
+  renderGame();
+}
+
+function renderGame() {
+  const L = G.level;
+  renderCoins();
+  $("levelName").textContent = L.kind === "daily" ? t("Daily Puzzle", "Günlük Bulmaca") : t("Level", "Bölüm") + " " + L.number;
+  $("twisterBadge").hidden = L.kind !== "twister";
+  $("twisterBadge").textContent = "⇄ " + t("Find the opposites!", "Zıt anlamlıları bul!");
+  $("levelTitle").textContent = L.title;
+  $("progressBar").style.width = (G.found.size / L.targets.length) * 100 + "%";
+  $("hintLbl").textContent = t("Hint", "İpucu");
+  $("revealLbl").textContent = t("Reveal", "Kelime Aç");
+
+  const hw = $("hiddenWord");
+  hw.hidden = !L.hidden;
+  if (L.hidden) {
+    const shown = Math.ceil((G.found.size * len(L.hidden)) / L.targets.length);
+    hw.innerHTML = [...L.hidden].map((ch, i) => `<span class="${i < shown ? "on" : ""}">${i < shown ? ch : ""}</span>`).join("");
+  }
+
+  $("chips").innerHTML = L.targets.map(tg => {
+    const f = G.found.get(tg.answer);
+    const label = tg.clue ? `${tg.clue} ↔ ${f ? tg.answer : "?"}` : tg.answer;
+    const style = f ? ` style="background:${WORD_COLORS[f.color % WORD_COLORS.length]}"` : "";
+    return `<span class="chip${f ? " found" : ""}${f && !tg.clue ? " strike" : ""}"${style}>${label}</span>`;
+  }).join("");
+  drawBoard();
+}
+
+function drawBoard() {
+  const seg = (cells, color, opacity) => {
+    const a = cells[0], b = cells[cells.length - 1];
+    return `<line x1="${a.c + 0.5}" y1="${a.r + 0.5}" x2="${b.c + 0.5}" y2="${b.r + 0.5}" stroke="${color}" stroke-opacity="${opacity}" stroke-width="0.78" stroke-linecap="round"/>`;
+  };
+  let svg = "";
+  for (const f of G.found.values()) svg += seg(f.cells, WORD_COLORS[f.color % WORD_COLORS.length], 0.75);
+  if (G.sel.length) svg += seg(G.sel, WORD_COLORS[G.found.size % WORD_COLORS.length], 0.55);
+  for (const k of G.hinted) {
+    const [r, c] = k.split(",").map(Number);
+    svg += `<circle class="hint-ring" cx="${c + 0.5}" cy="${r + 0.5}" r="0.4"/>`;
+  }
+  $("boardSvg").innerHTML = svg;
+}
+
+function lineBetween(a, b) {
+  const dr = b.r - a.r, dc = b.c - a.c;
+  if (!(dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc))) return null;
+  const steps = Math.max(Math.abs(dr), Math.abs(dc)), sr = Math.sign(dr), sc = Math.sign(dc);
+  return Array.from({ length: steps + 1 }, (_, i) => ({ r: a.r + sr * i, c: a.c + sc * i }));
+}
+
+function local(e) {
+  const rect = $("board").getBoundingClientRect();
+  return { x: e.clientX - rect.left, y: e.clientY - rect.top, cell: rect.width / G.level.size };
+}
+
+function cellAt(p) {
+  const r = Math.floor(p.y / p.cell), c = Math.floor(p.x / p.cell), n = G.level.size;
+  return r >= 0 && r < n && c >= 0 && c < n ? { r, c } : null;
+}
+
+// Snaps the pointer to the nearest of the 8 directions from the start cell.
+function snappedEnd(start, p) {
+  const ox = (start.c + 0.5) * p.cell, oy = (start.r + 0.5) * p.cell;
+  const dx = p.x - ox, dy = p.y - oy, dist = Math.hypot(dx, dy);
+  if (dist < p.cell * 0.4) return start;
+  const angle = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4);
+  const dc = Math.round(Math.cos(angle)), dr = Math.round(Math.sin(angle));
+  const step = dr && dc ? p.cell * Math.SQRT2 : p.cell, n = G.level.size;
+  let length = Math.round(dist / step);
+  const inside = k => { const r = start.r + dr * k, c = start.c + dc * k; return r >= 0 && r < n && c >= 0 && c < n; };
+  while (length > 0 && !inside(length)) length--;
+  return { r: start.r + dr * length, c: start.c + dc * length };
+}
+
+const board = $("board");
+board.addEventListener("pointerdown", e => {
+  if (!G || G.complete) return;
+  const start = cellAt(local(e));
+  if (!start) return;
+  try { board.setPointerCapture(e.pointerId); } catch (err) {}
+  G.dragStart = start;
+  G.sel = [start];
+  drawBoard();
+});
+board.addEventListener("pointermove", e => {
+  if (!G || !G.dragStart) return;
+  const sel = lineBetween(G.dragStart, snappedEnd(G.dragStart, local(e))) || [G.dragStart];
+  if (sel.map(key).join() !== G.sel.map(key).join()) { G.sel = sel; vibrate(4); drawBoard(); }
+});
+const endDrag = () => { if (!G || !G.dragStart) return; G.dragStart = null; submitSelection(); };
+board.addEventListener("pointerup", endDrag);
+board.addEventListener("pointercancel", endDrag);
+
+function submitSelection() {
+  const L = G.level, sel = G.sel;
+  G.sel = [];
+  if (sel.length >= 2) {
+    const text = sel.map(p => L.grid[p.r][p.c]).join(""), rev = [...text].reverse().join("");
+    const target = L.targets.find(x => !G.found.has(x.answer) && (x.answer === text || x.answer === rev));
+    if (target) { markFound(target, sel); wordFound(); }
+    else { vibrate([30, 40, 30]); board.classList.remove("shake"); void board.offsetWidth; board.classList.add("shake"); }
+  }
+  renderGame();
+}
+
+function markFound(target, cells) {
+  G.found.set(target.answer, { cells, color: G.found.size });
+  if (G.found.size === G.level.targets.length) { G.complete = true; setTimeout(finishLevel, 600); }
+}
+
+function wordFound() { vibrate(20); store.wordsFound++; save(); }
+
+function spend(amount) { if (store.coins < amount) return false; store.coins -= amount; save(); return true; }
+
+$("hintBtn").onclick = () => {
+  if (!G || G.complete) return;
+  if (!spend(HINT_COST)) return toast(t("Not enough coins", "Yeterli coin yok"));
+  const options = G.level.targets.filter(x => !G.found.has(x.answer) && !G.hinted.has(key(G.level.placements[x.answer][0])));
+  if (!options.length) { store.coins += HINT_COST; save(); toast(t("All first letters already shown", "Tüm ilk harfler zaten gösterildi")); }
+  else G.hinted.add(key(G.level.placements[pick(options, Math.random).answer][0]));
+  renderGame();
+};
+
+$("revealBtn").onclick = () => {
+  if (!G || G.complete) return;
+  if (!spend(REVEAL_COST)) return toast(t("Not enough coins", "Yeterli coin yok"));
+  const target = G.level.targets.find(x => !G.found.has(x.answer));
+  if (target) { markFound(target, G.level.placements[target.answer]); wordFound(); } else { store.coins += REVEAL_COST; save(); }
+  renderGame();
+};
+
+let toastTimer;
+function toast(text) {
+  $("toast").textContent = text;
+  $("toast").hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => ($("toast").hidden = true), 1600);
+}
+
+function finishLevel() {
+  const L = G.level, bonus = L.kind === "bonus" ? 30 : 0, earned = REWARD[L.kind] + bonus;
+  let bloomed = null;
+  store.coins += earned;
+  if (L.kind === "daily") store.lastDaily = dayKey();
+  else {
+    store.level = L.number + 1;
+    if (++store.bloom >= LEVELS_PER_BLOOM) { store.bloom = 0; bloomed = nextFlower(); store.flowers.push(bloomed.id); }
+  }
+  save();
+  renderCoins();
+
+  const daily = L.kind === "daily";
+  showOverlay(`
+    <div class="dialog">
+      <div class="emoji">${bloomed ? bloomed.emoji : "🌸"}</div>
+      <h2>${daily ? t("Daily Puzzle Solved!", "Günlük Bulmaca Çözüldü!") : t("Level Complete!", "Bölüm Tamamlandı!")}</h2>
+      ${bloomed ? `<div>${t("A new flower bloomed", "Yeni bir çiçek açtı")}: ${bloomed[lang()]}</div>` : ""}
+      ${L.hidden ? `<b style="color:var(--leaf)">${t("Hidden word", "Gizli kelime")}: ${L.hidden}</b>` : ""}
+      <div class="pill">+ <span class="coin">$</span> ${earned}</div>
+      <button class="big-btn" id="nextBtn">${daily ? t("Done", "Tamam") : t("Next Level", "Sonraki Bölüm")}</button>
+      ${daily ? "" : `<button class="link-btn" id="homeBtn">${t("Home", "Ana Sayfa")}</button>`}
+    </div>`);
+  $("nextBtn").onclick = () => (daily ? closeOverlayTo("home") : startGame(makeLevel(store.level, L.lang)));
+  if (!daily) $("homeBtn").onclick = () => closeOverlayTo("home");
+}
+
+// ───────────────────────── Overlays ─────────────────────────
+function showOverlay(html, dismissable) {
+  const o = $("overlay");
+  o.innerHTML = html;
+  o.hidden = false;
+  o.onclick = dismissable ? e => { if (e.target === o) closeOverlayTo(); } : null;
+}
+function closeOverlayTo(screen) {
+  $("overlay").hidden = true;
+  $("overlay").innerHTML = "";
+  if (screen) showScreen(screen); else renderHome();
+}
+
+function openGarden() {
+  const cards = FLOWERS.map(f => {
+    const count = store.flowers.filter(id => id === f.id).length;
+    return `<div class="${count ? "" : "locked"}"><span>${f.emoji}</span>${count ? f[lang()] : "???"}${count > 1 ? `<br><small style="color:var(--pink)">×${count}</small>` : ""}</div>`;
+  }).join("");
+  showOverlay(`
+    <div class="sheet">
+      <h2>${t("My Garden", "Bahçem")}</h2>
+      <div style="opacity:.7">${t(`${store.flowers.length} flowers bloomed · ${store.wordsFound} words found`, `${store.flowers.length} çiçek açtı · ${store.wordsFound} kelime bulundu`)}</div>
+      <div class="garden">${cards}</div>
+      <button class="big-btn" id="closeBtn">${t("Close", "Kapat")}</button>
+    </div>`, true);
+  $("closeBtn").onclick = () => closeOverlayTo();
+}
+
+// Blossom Wheel: one free spin per day for coins.
+const WHEEL = [10, 50, 20, 100, 15, 30, 25, 200];
+let wheelRotation = 0;
+function openWheel() {
+  const slice = 360 / WHEEL.length, rad = a => (a * Math.PI) / 180;
+  const slices = WHEEL.map((value, i) => {
+    // Slice i sits under the pointer (top) when the wheel is rotated by 360 - i * slice.
+    const a0 = rad(i * slice - slice / 2 - 90), a1 = rad(i * slice + slice / 2 - 90);
+    return `<path d="M100 100 L${100 + 100 * Math.cos(a0)} ${100 + 100 * Math.sin(a0)} A100 100 0 0 1 ${100 + 100 * Math.cos(a1)} ${100 + 100 * Math.sin(a1)} Z" fill="${WORD_COLORS[i]}"/>
+            <text x="100" y="34" text-anchor="middle" fill="#fff" font-weight="800" font-size="16" transform="rotate(${i * slice} 100 100)">${value}</text>`;
+  }).join("");
+  const available = store.lastSpin !== dayKey();
+  showOverlay(`
+    <div class="sheet">
+      <h2>${t("Blossom Wheel", "Çiçek Çarkı")}</h2>
+      <div class="wheel-box">
+        <div class="pointer">▼</div>
+        <svg viewBox="0 0 200 200" id="wheel" style="transform:rotate(${wheelRotation}deg)">${slices}<circle cx="100" cy="100" r="22" fill="#fff"/><text x="100" y="108" text-anchor="middle" font-size="22">🌸</text></svg>
+      </div>
+      <div id="wheelMsg" style="font-weight:700;min-height:1.4em">${available ? "" : t("Come back tomorrow for another spin", "Yeni çevirme hakkı için yarın gel")}</div>
+      <button class="big-btn" id="spinBtn">${available ? t("Spin!", "Çevir!") : t("Close", "Kapat")}</button>
+    </div>`, true);
+
+  $("spinBtn").onclick = () => {
+    if (store.lastSpin === dayKey()) return closeOverlayTo();
+    const btn = $("spinBtn");
+    btn.disabled = true;
+    const index = Math.floor(Math.random() * WHEEL.length);
+    wheelRotation = wheelRotation - (wheelRotation % 360) + 360 * 5 + (360 - index * slice);
+    $("wheel").style.transform = `rotate(${wheelRotation}deg)`;
+    setTimeout(() => {
+      store.lastSpin = dayKey();
+      store.coins += WHEEL[index];
+      save();
+      vibrate(30);
+      $("wheelMsg").style.color = "var(--pink)";
+      $("wheelMsg").textContent = t(`You won ${WHEEL[index]} coins! 🌸`, `${WHEEL[index]} coin kazandın! 🌸`);
+      btn.textContent = t("Close", "Kapat");
+      btn.disabled = false;
+    }, 3600);
+  };
+}
+
+showScreen("home");
+</script>
+</body>
+</html>
