@@ -1,0 +1,28 @@
+name: BlossomWordSearch
+options:
+  developmentLanguage: en
+  bundleIdPrefix: com.ilayda
+  deploymentTarget:
+    iOS: "17.0"
+targets:
+  BlossomWordSearch:
+    type: application
+    platform: iOS
+    sources: [BlossomWordSearch]
+    info:
+      path: BlossomWordSearch/Info.plist
+      properties:
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, tr]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ilayda.blossomwordsearch
+        SWIFT_VERSION: "5.0"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Blossom
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"

@@ -1,0 +1,362 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0B6420784F5D0A9B6B9CB24E /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B427DABE22139605E356375 /* Theme.swift */; };
+		2A9B8F7D4C88D5E88BFA8BE7 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC96E9B59FEC1B90956C090 /* Level.swift */; };
+		3DA6B8E4D0AAEE2DA74FA63F /* PlayerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECBE9F14D10C5FEDC82C17F8 /* PlayerStore.swift */; };
+		4D7A592F23986F7A22ADCAA8 /* WheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EB69F2B99FF4134011217A /* WheelView.swift */; };
+		5B60E758D518C216B069F752 /* LevelCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2FC47343E19B2B1C63F73F /* LevelCompleteView.swift */; };
+		6EEA028340943D919589FB8F /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6485CC31B6B3B07EB3F49D /* GridView.swift */; };
+		7F2DB292E4AF55F23DCDC19B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C63586C46E82A4BBCF822CA7 /* HomeView.swift */; };
+		96A9A387FD349456211BF041 /* WordBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42A577F4EAC467899B87923 /* WordBank.swift */; };
+		972E1D11B7297AEDA28C4BF9 /* GardenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD8DA8997B5D5FE334557BC /* GardenView.swift */; };
+		A105EC0A774F64555FD0D424 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DE1B293B1956D20FAC4CC9 /* GameViewModel.swift */; };
+		B5C84D3FC81BDBC2DA25FD8D /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC8CE14623810324AB9148 /* GameView.swift */; };
+		C6B6EFC66FFE05D87B7A27AF /* GridGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8A95E0C5967E89D666F137 /* GridGenerator.swift */; };
+		FCB8366D5D2E702AEAC05CA8 /* BlossomWordSearchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA794E9BAF0180406D6CFFC4 /* BlossomWordSearchApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0B427DABE22139605E356375 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		0E6485CC31B6B3B07EB3F49D /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		0E8A95E0C5967E89D666F137 /* GridGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridGenerator.swift; sourceTree = "<group>"; };
+		23DE1B293B1956D20FAC4CC9 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
+		41EB69F2B99FF4134011217A /* WheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelView.swift; sourceTree = "<group>"; };
+		4B2FC47343E19B2B1C63F73F /* LevelCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelCompleteView.swift; sourceTree = "<group>"; };
+		5DC96E9B59FEC1B90956C090 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		632BD82EEF758AF3B06789BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A42A577F4EAC467899B87923 /* WordBank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordBank.swift; sourceTree = "<group>"; };
+		BA794E9BAF0180406D6CFFC4 /* BlossomWordSearchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlossomWordSearchApp.swift; sourceTree = "<group>"; };
+		C63586C46E82A4BBCF822CA7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		DFD8DA8997B5D5FE334557BC /* GardenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GardenView.swift; sourceTree = "<group>"; };
+		E598E97B6F967F553AE08123 /* BlossomWordSearch.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BlossomWordSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECBE9F14D10C5FEDC82C17F8 /* PlayerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStore.swift; sourceTree = "<group>"; };
+		F8AC8CE14623810324AB9148 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		394CAB2115D35A4A3CCA6008 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E598E97B6F967F553AE08123 /* BlossomWordSearch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5159052312F78726900F3EBE = {
+			isa = PBXGroup;
+			children = (
+				7C10920447326FA1E6310EC9 /* BlossomWordSearch */,
+				394CAB2115D35A4A3CCA6008 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		520054E5C5308623822600B8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				23DE1B293B1956D20FAC4CC9 /* GameViewModel.swift */,
+				0E8A95E0C5967E89D666F137 /* GridGenerator.swift */,
+				5DC96E9B59FEC1B90956C090 /* Level.swift */,
+				ECBE9F14D10C5FEDC82C17F8 /* PlayerStore.swift */,
+				A42A577F4EAC467899B87923 /* WordBank.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7C10920447326FA1E6310EC9 /* BlossomWordSearch */ = {
+			isa = PBXGroup;
+			children = (
+				BA794E9BAF0180406D6CFFC4 /* BlossomWordSearchApp.swift */,
+				632BD82EEF758AF3B06789BA /* Info.plist */,
+				520054E5C5308623822600B8 /* Models */,
+				8A9C7CA922DD3A9C2F632B9D /* Views */,
+			);
+			path = BlossomWordSearch;
+			sourceTree = "<group>";
+		};
+		8A9C7CA922DD3A9C2F632B9D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F8AC8CE14623810324AB9148 /* GameView.swift */,
+				DFD8DA8997B5D5FE334557BC /* GardenView.swift */,
+				0E6485CC31B6B3B07EB3F49D /* GridView.swift */,
+				C63586C46E82A4BBCF822CA7 /* HomeView.swift */,
+				4B2FC47343E19B2B1C63F73F /* LevelCompleteView.swift */,
+				0B427DABE22139605E356375 /* Theme.swift */,
+				41EB69F2B99FF4134011217A /* WheelView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DEDD802DE2BC909861B3A735 /* BlossomWordSearch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2071BDD811A77AB1C1C16066 /* Build configuration list for PBXNativeTarget "BlossomWordSearch" */;
+			buildPhases = (
+				CB1B27DFF80137855EBCEF5F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BlossomWordSearch;
+			packageProductDependencies = (
+			);
+			productName = BlossomWordSearch;
+			productReference = E598E97B6F967F553AE08123 /* BlossomWordSearch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F0BC0AEA594BC33E4E2D3A03 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 0D38C3C5933E0108EFAF82EF /* Build configuration list for PBXProject "BlossomWordSearch" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 5159052312F78726900F3EBE;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 394CAB2115D35A4A3CCA6008 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DEDD802DE2BC909861B3A735 /* BlossomWordSearch */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CB1B27DFF80137855EBCEF5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCB8366D5D2E702AEAC05CA8 /* BlossomWordSearchApp.swift in Sources */,
+				B5C84D3FC81BDBC2DA25FD8D /* GameView.swift in Sources */,
+				A105EC0A774F64555FD0D424 /* GameViewModel.swift in Sources */,
+				972E1D11B7297AEDA28C4BF9 /* GardenView.swift in Sources */,
+				C6B6EFC66FFE05D87B7A27AF /* GridGenerator.swift in Sources */,
+				6EEA028340943D919589FB8F /* GridView.swift in Sources */,
+				7F2DB292E4AF55F23DCDC19B /* HomeView.swift in Sources */,
+				2A9B8F7D4C88D5E88BFA8BE7 /* Level.swift in Sources */,
+				5B60E758D518C216B069F752 /* LevelCompleteView.swift in Sources */,
+				3DA6B8E4D0AAEE2DA74FA63F /* PlayerStore.swift in Sources */,
+				0B6420784F5D0A9B6B9CB24E /* Theme.swift in Sources */,
+				4D7A592F23986F7A22ADCAA8 /* WheelView.swift in Sources */,
+				96A9A387FD349456211BF041 /* WordBank.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2533FF5247578C5AA686F67F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BlossomWordSearch/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Blossom;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ilayda.blossomwordsearch;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		80A1EA151C15E38E298CF970 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		DD339919F049915263CEB008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E3598850F2D1877055C6F2B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BlossomWordSearch/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Blossom;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ilayda.blossomwordsearch;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0D38C3C5933E0108EFAF82EF /* Build configuration list for PBXProject "BlossomWordSearch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80A1EA151C15E38E298CF970 /* Debug */,
+				DD339919F049915263CEB008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2071BDD811A77AB1C1C16066 /* Build configuration list for PBXNativeTarget "BlossomWordSearch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3598850F2D1877055C6F2B9 /* Debug */,
+				2533FF5247578C5AA686F67F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F0BC0AEA594BC33E4E2D3A03 /* Project object */;
+}
